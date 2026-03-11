@@ -1,0 +1,167 @@
+{
+  "Mono Blue Terror": [
+    "Tolarian Terror",
+    "Cryptic Serpent",
+    "Mental Note",
+    "Thought Scour",
+    "Consider",
+    "Counterspell",
+    "Lórien Revealed"
+  ],
+
+  "Elves": [
+    "Llanowar Elves",
+    "Elvish Mystic",
+    "Timberwatch Elf",
+    "Quirion Ranger",
+    "Priest of Titania",
+    "Distant Melody",
+    "Birchlore Rangers"
+  ],
+
+  "Jund Wildfire": [
+    "Cleansing Wildfire",
+    "Writhing Chrysalis",
+    "Ichor Wellspring",
+    "Lembas",
+    "Toxin Analysis",
+    "Fanatical Offering"
+  ],
+
+  "Grixis Affinity": [
+    "Myr Enforcer",
+    "Thoughtcast",
+    "Galvanic Blast",
+    "Krark-Clan Shaman",
+    "Refurbished Familiar",
+    "Blood Fountain",
+    "Ichor Wellspring"
+  ],
+
+  "Mono Red Rally": [
+    "Goblin Bushwhacker",
+    "Rally at the Hornburg",
+    "Burning-Tree Emissary",
+    "Reckless Impulse",
+    "Lightning Bolt",
+    "Experimental Synthesizer"
+  ],
+
+  "Madness": [
+    "Fiery Temper",
+    "Kitchen Imp",
+    "Alms of the Vein",
+    "Faithless Looting",
+    "Lightning Bolt",
+    "Galvanic Blast",
+    "Sneaky Snacker"
+  ],
+
+  "Gruul Ramp": [
+    "Arbor Elf",
+    "Utopia Sprawl",
+    "Avenging Hunter",
+    "Boarding Party",
+    "Writhing Chrysalis",
+    "Annoyed Altisaur",
+    "Eldrazi Repurposer"
+  ],
+
+  "Caw Gates": [
+    "Squadron Hawk",
+    "Guardian of the Guildpact",
+    "Basilisk Gate",
+    "Citadel Gate",
+    "Heap Gate",
+    "Sacred Cat",
+    "Prismatic Strands"
+  ],
+
+  "Golgari Gardens": [
+    "Lembas",
+    "Writhing Chrysalis",
+    "Toxin Analysis",
+    "Weather the Storm",
+    "Fanatical Offering",
+    "Thorn of the Black Rose"
+  ],
+
+  "UB Faeries": [
+    "Spellstutter Sprite",
+    "Faerie Seer",
+    "Ninja of the Deep Hours",
+    "Counterspell",
+    "Snuff Out",
+    "Of One Mind",
+    "Spell Pierce"
+  ],
+
+  "Mono Red Burn": [
+    "Lightning Bolt",
+    "Chain Lightning",
+    "Lava Spike",
+    "Rift Bolt",
+    "Fireblast",
+    "Thermo-Alchemist",
+    "Kessig Flamebreather"
+  ],
+
+  "Spy Combo": [
+    "Balustrade Spy",
+    "Undercity Informer",
+    "Dread Return",
+    "Lotleth Giant",
+    "Troll of Khazad-dûm",
+    "Land Grant",
+    "Songs of the Damned"
+  ],
+
+  "White Weenie": [
+    "Thraben Inspector",
+    "Lunarch Veteran",
+    "Battle Screech",
+    "Guardian of the Guildpact",
+    "Journey to Nowhere",
+    "Prismatic Strands",
+    "Sacred Cat"
+  ],
+
+  "Dimir Terror": [
+    "Tolarian Terror",
+    "Gurmag Angler",
+    "Thought Scour",
+    "Mental Note",
+    "Snuff Out",
+    "Counterspell",
+    "Lórien Revealed"
+  ],
+
+  "Mono Black Sacrifice": [
+    "Carrion Feeder",
+    "Nested Shambler",
+    "Village Rites",
+    "Blood Fountain",
+    "Gixian Infiltrator",
+    "Unearth"
+  ],
+
+  "Dredge": [
+    "Stinkweed Imp",
+    "Golgari Brownscale",
+    "Faithless Looting",
+    "Thrilling Discovery",
+    "Tortured Existence",
+    "Scrapwork Mutt",
+    "Darkblast"
+  ],
+
+  "GW Bogles": [
+    "Slippery Bogle",
+    "Gladecover Scout",
+    "Ancestral Mask",
+    "Ethereal Armor",
+    "Rancor",
+    "Utopia Sprawl",
+    "Armadillo Cloak"
+  ]
+}
