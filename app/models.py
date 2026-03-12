@@ -6,9 +6,10 @@ from sqlalchemy import (
   BigInteger,
   ForeignKey,
   ForeignKeyConstraint,
+  DateTime
 )
 from sqlalchemy.orm import relationship
-
+from datetime import datetime
 from app.database import Base
 
 # Tournament table
@@ -95,3 +96,35 @@ class DecklistCard(Base):
 
   deck = relationship("Deck", back_populates="decklist_cards")
   card = relationship("Card", back_populates="decklist_entries")
+  
+  
+class User(Base):
+  __tablename__ = "users"
+
+  id = Column(Integer, primary_key=True, index=True)
+  email = Column(String, unique=True, nullable=False, index=True)
+  password_hash = Column(String, nullable=False)
+  is_active = Column(Boolean, default=True, nullable=False)
+  created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+  api_keys = relationship("ApiKey", back_populates="user")
+
+
+class ApiKey(Base):
+  __tablename__ = "api_keys"
+
+  id = Column(Integer, primary_key=True, index=True)
+  user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+  key_prefix = Column(String, nullable=False, index=True)
+  key_hash = Column(String, unique=True, nullable=False, index=True)
+
+  is_blocked = Column(Boolean, default=False, nullable=False)
+  blocked_until = Column(DateTime, nullable=True)
+
+  request_count = Column(Integer, default=0, nullable=False)
+  window_started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+  created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+  user = relationship("User", back_populates="api_keys")
