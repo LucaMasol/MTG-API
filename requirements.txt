@@ -7,3 +7,6 @@ psycopg2-binary
 requests
 curl-cffi
 matplotlib
+passlib
+pydantic[email]
+bcrypt==4.0.1
