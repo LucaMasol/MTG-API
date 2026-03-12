@@ -6,7 +6,7 @@ from app.database import SessionLocal
 from app.models import Deck, Tournament
 
 
-def unix_timestamp(dt: datetime | None) -> int | None:
+def _unix_timestamp(dt: datetime | None) -> int | None:
   if dt is None:
     return None
   return int(dt.timestamp())
@@ -39,8 +39,8 @@ def get_meta_over_time_summary(
       .filter(Deck.archetype.isnot(None))
     )
 
-    start_unix = unix_timestamp(start_time)
-    end_unix = unix_timestamp(end_time)
+    start_unix = _unix_timestamp(start_time)
+    end_unix = _unix_timestamp(end_time)
 
     # Bound data to start date
     if start_unix is not None:
