@@ -109,7 +109,7 @@ class User(Base):
   created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
   api_keys = relationship("ApiKey", back_populates="user")
-  decks = relationship("UserDeck", cascade="all, delete-orphan")
+  decks = relationship("UserDeck", back_populates="user", cascade="all, delete-orphan")
 
 
 class ApiKey(Base):
@@ -143,6 +143,13 @@ class UserDeck(Base):
     index=True,
   )
   name = Column(String, nullable=False)
+  
+  user = relationship(
+    "User",
+    back_populates="decks",
+    foreign_keys=[user_email],
+    primaryjoin="User.email == UserDeck.user_email",
+  )
 
   cards = relationship(
     "UserDecklistCard",

@@ -1,17 +1,17 @@
 from typing import Dict
 from fastapi import HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, constr
 from sqlalchemy.orm import Session
 
 from app.models import Card, ApiKey, UserDeck, UserDecklistCard
 
 
 class CreateUserDeckRequest(BaseModel):
-  name: str = Field(..., min_length=1, max_length=255)
+  name: str = constr(strip_whitespace=True, min_length=1, max_length=255)
 
 
 class RenameUserDeckRequest(BaseModel):
-  name: str = Field(..., min_length=1, max_length=255)
+  name: str = constr(strip_whitespace=True, min_length=1, max_length=255)
 
 
 class UserDeckResponse(BaseModel):
@@ -70,9 +70,12 @@ def _get_owned_deck_or_404(deck_id: int, api_key: ApiKey, db: Session) -> UserDe
 
 # If card does not exist in the shared card table, add it
 def _ensure_card_exists(card_name: str, db: Session) -> Card:
-  card = db.query(Card).filter(Card.card_name == card_name).first()
+  normalized_name = card_name.strip()
+  if not normalized_name:
+    raise HTTPException(status_code=422, detail="Card name cannot be empty")
+  card = db.query(Card).filter(Card.card_name == normalized_name).first()
   if not card:
-    card = Card(card_name=card_name)
+    card = Card(card_name=normalized_name)
     db.add(card)
     db.flush()
   return card
@@ -81,7 +84,7 @@ def _ensure_card_exists(card_name: str, db: Session) -> Card:
 def create_user_deck(payload: CreateUserDeckRequest, api_key: ApiKey, db: Session) -> UserDeck:
   deck = UserDeck(
     user_email=api_key.user.email,
-    name=payload.name.strip(),
+    name=payload.name,
   )
   db.add(deck)
   db.commit()
@@ -109,7 +112,7 @@ def rename_user_deck(
   db: Session,
 ) -> UserDeck:
   deck = _get_owned_deck_or_404(deck_id, api_key, db)
-  deck.name = payload.name.strip()
+  deck.name = payload.name
   db.commit()
   db.refresh(deck)
   return deck
