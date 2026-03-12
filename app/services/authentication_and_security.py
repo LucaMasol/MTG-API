@@ -1,13 +1,33 @@
 import secrets
 import hashlib
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
+
 from fastapi import Header, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.models import User, ApiKey
-from app.database import SessionLocal
+from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
-from database_helpers import get_db
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+
+from app.models import User, ApiKey
+from app.services.database_helpers import get_db
+
+class SignupRequest(BaseModel):
+  email: EmailStr = Field(
+    ...,
+    description="User email address",
+    examples=["test@test.com"]
+  )
+  password: str = Field(
+    ...,
+    min_length=8,
+    max_length=128,
+    description="Account password, minimum 8 characters",
+    examples=["12345678"]
+  )
+
+class SignupResponse(BaseModel):
+  message: str = Field(description="Signup result message")
+  api_key: str = Field(description="Generated API key, shown only once")
 
 def generate_api_key() -> str:
   return "mtg_" + secrets.token_urlsafe(32)
@@ -27,56 +47,62 @@ def hash_password(password: str) -> str:
 def verify_password(password: str, password_hash: str) -> bool:
   return pwd_context.verify(password, password_hash)
 
-def signup(payload: SignupRequest, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == payload.email).first()
-    if existing:
-        raise HTTPException(status_code=409, detail="Email already registered")
+def signup(payload: SignupRequest, db: Session) -> SignupResponse:
+  existing = db.query(User).filter(User.email == payload.email).first()
+  if existing:
+    raise HTTPException(status_code=409, detail="Email already registered")
 
-    user = User(
-        email=payload.email,
-        password_hash=hash_password(payload.password),
-    )
-    db.add(user)
-    db.flush()
+  user = User(
+    email=payload.email,
+    password_hash=hash_password(payload.password),
+  )
+  db.add(user)
+  db.flush()
 
-    raw_key = generate_api_key()
-    api_key = ApiKey(
-        user_id=user.id,
-        key_prefix=key_prefix(raw_key),
-        key_hash=hash_api_key(raw_key),
-    )
-    db.add(api_key)
+  raw_key = generate_api_key()
+  api_key = ApiKey(
+    user_id=user.id,
+    key_prefix=key_prefix(raw_key),
+    key_hash=hash_api_key(raw_key),
+  )
+  db.add(api_key)
+  
+  # Prevent race during signup of 2 of the same email into a 409 response instead of server error
+  try:
     db.commit()
-    return SignupResponse(
-        message="User created. Store this API key securely, as it will not be shown again.",
-        api_key=raw_key,
-    )
+  except IntegrityError:
+    db.rollback()
+    raise HTTPException(status_code=409, detail="Email already registered")
 
-class SignupRequest(BaseModel):
-  email: EmailStr
-  password: str = Field(min_length=8, max_length=128)
+  return SignupResponse(
+    message="User created. Store this API key securely, as it will not be shown again.",
+    api_key=raw_key,
+  )
 
-
-class SignupResponse(BaseModel):
-  message: str
-  api_key: str
-    
-
-
-
-RATE_LIMIT_REQUESTS = 5
-RATE_LIMIT_WINDOW_SECONDS = 5
+RATE_LIMIT_REQUESTS = 10
+RATE_LIMIT_WINDOW_SECONDS = 10
 BLOCK_MINUTES = 5
 
 def get_api_key_record(
-  x_api_key: str | None = Header(default=None, alias="X-API-Key"),
+  x_api_key: str | None = Header(
+    default=None,
+    alias="X-API-Key",
+    description="API key for authenticated endpoints"
+  ),
   db: Session = Depends(get_db),
 ) -> ApiKey:
   if not x_api_key:
     raise HTTPException(status_code=401, detail="Missing API key")
 
   hashed = hash_api_key(x_api_key)
-  api_key = db.query(ApiKey).filter(ApiKey.key_hash == hashed).first()
+  
+  # Lock the API key row during rate-limit eval to prevent concurrent requests bypassing
+  api_key = (
+    db.query(ApiKey)
+    .filter(ApiKey.key_hash == hashed)
+    .with_for_update()
+    .first()
+  )
 
   if not api_key:
     raise HTTPException(status_code=401, detail="Invalid API key")
