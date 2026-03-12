@@ -86,7 +86,7 @@ def process_unprocessed_decklists() -> None:
 
       moxfield_id = extract_moxfield_deck_id(deck.moxfield_decklist)
       # Delete any entries that do not have a decklist
-      if not deck.moxfield_decklist or moxfield_id:
+      if not deck.moxfield_decklist or not moxfield_id:
         print(f"Deleting deck {deck_key}: invalid or missing Moxfield ID.")
         session.delete(deck)
         session.commit()

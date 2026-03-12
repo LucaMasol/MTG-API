@@ -163,5 +163,235 @@
     "Rancor",
     "Utopia Sprawl",
     "Armadillo Cloak"
+  ],
+
+  "Orzhov Blade": [
+    "Kor Skyfisher",
+    "Glint Hawk",
+    "Thraben Inspector",
+    "Vault of Whispers",
+    "Ancient Den",
+    "Cast Down",
+    "Omen of the Dead"
+  ],
+
+  "Izzet Skred": [
+    "Skred",
+    "Volatile Fjord",
+    "Augur of Bolas",
+    "Mulldrifter",
+    "Lightning Bolt",
+    "Brainstorm",
+    "Clearing Wildfire"
+  ],
+
+  "Gruul Ponza": [
+    "Thermokarst",
+    "Mwonvuli Acid-Moss",
+    "Arbor Elf",
+    "Utopia Sprawl",
+    "Boarding Party",
+    "Annoyed Altisaur",
+    "Stone Rain"
+  ],
+
+  "Esper Affinity": [
+    "All That Glitters",
+    "Glint Hawk",
+    "Thoughtcast",
+    "Myr Enforcer",
+    "Ancient Den",
+    "Vault of Whispers",
+    "Kenku Artificer"
+  ],
+
+  "Mono Red Synthesizer": [
+    "Experimental Synthesizer",
+    "Kuldotha Rebirth",
+    "Goblin Blast-Runner",
+    "Reckless Impulse",
+    "Wrenn's Resolve",
+    "Implement of Combustion",
+    "Great Furnace"
+  ],
+
+  "Mono White Heroic": [
+    "Lagonna-Band Trailblazer",
+    "Akroan Skyguard",
+    "Ethereal Armor",
+    "Cartouche of Solidarity",
+    "Benevolent Blessing",
+    "Sentinel's Eyes",
+    "Hyena Umbra"
+  ],
+
+  "Monster Tron": [
+    "Urza's Mine",
+    "Urza's Power Plant",
+    "Urza's Tower",
+    "Rolling Thunder",
+    "Ulamog's Crusher",
+    "Crop Rotation",
+    "Ancient Stirrings"
+  ],
+
+  "Altar Tron": [
+    "Ashnod's Altar",
+    "Myr Retriever",
+    "Workshop Assistant",
+    "Chromatic Star",
+    "Energy Refractor",
+    "Urza's Tower",
+    "Urza's Mine"
+  ],
+
+  "Defender Combo": [
+    "Axebane Guardian",
+    "Overgrown Battlement",
+    "Drift of Phantasms",
+    "Galvanic Alchemist",
+    "Shield-Wall Sentinel",
+    "Tuktuk Rubblefort",
+    "Freed from the Real"
+  ],
+
+  "Red Storm": [
+    "Empty the Warrens",
+    "Rite of Flame",
+    "Seething Song",
+    "Manamorphose",
+    "Gitaxian Probe",
+    "Warlord's Fury",
+    "Crimson Wisps"
+  ],
+
+  "Jeskai Ephemerate": [
+    "Ephemerate",
+    "Mulldrifter",
+    "Archaeomancer",
+    "Lightning Bolt",
+    "Skred",
+    "Lórien Revealed",
+    "Late to Dinner"
+  ],
+
+  "Flicker Tron": [
+    "Ghostly Flicker",
+    "Mnemonic Wall",
+    "Mulldrifter",
+    "Expedition Map",
+    "Prophetic Prism",
+    "Stonehorn Dignitary",
+    "Urza's Tower"
+  ],
+
+  "Retriever Combo": [
+    "Myr Retriever",
+    "Workshop Assistant",
+    "Ashnod's Altar",
+    "Chromatic Star",
+    "Conjurer's Bauble",
+    "Makeshift Munitions",
+    "Ichor Wellspring"
+  ],
+
+  "Golgari Pestilence": [
+    "Pestilence",
+    "Guardian of the Guildpact",
+    "Crypt Rats",
+    "Pristine Talisman",
+    "Chainer's Edict",
+    "Barren Moor",
+    "Dead Weight"
+  ],
+
+  "Dimir Control": [
+    "Accumulated Knowledge",
+    "Think Twice",
+    "Chainer's Edict",
+    "Snuff Out",
+    "Exclude",
+    "Behold the Multiverse",
+    "Lórien Revealed"
+  ],
+
+  "Boros Synthesizer": [
+    "Experimental Synthesizer",
+    "Glint Hawk",
+    "Kor Skyfisher",
+    "Galvanic Blast",
+    "Thraben Inspector",
+    "Great Furnace",
+    "Ancient Den"
+  ],
+
+  "Jund Gardens": [
+    "Khalni Garden",
+    "Writhing Chrysalis",
+    "Fanatical Offering",
+    "Toxin Analysis",
+    "Weather the Storm",
+    "Krark-Clan Shaman",
+    "Lembas"
+  ],
+
+  "Turbo Fog": [
+    "Moment's Peace",
+    "Tangle",
+    "Respite",
+    "Weather the Storm",
+    "Accumulated Knowledge",
+    "Jace's Erasure",
+    "Stream of Thought"
+  ],
+
+  "Persistent Petitioners": [
+    "Persistent Petitioners",
+    "Thrumming Stone",
+    "Brainstorm",
+    "Preordain",
+    "Snap",
+    "Dispel",
+    "Counterspell"
+  ],
+
+  "Naya Gates": [
+    "Basilisk Gate",
+    "Citadel Gate",
+    "Manor Gate",
+    "Gond Gate",
+    "Gatebreaker Ram",
+    "Saruli Gatekeepers",
+    "Sacred Cat"
+  ],
+
+  "Cascade Tron": [
+    "Boarding Party",
+    "Annoyed Altisaur",
+    "Urza's Tower",
+    "Urza's Mine",
+    "Crop Rotation",
+    "Energy Refractor",
+    "Chromatic Star"
+  ],
+
+  "Eggs Tron": [
+    "Chromatic Star",
+    "Chromatic Sphere",
+    "Elsewhere Flask",
+    "Conjurer's Bauble",
+    "Energy Refractor",
+    "Urza's Tower",
+    "Mnemonic Wall"
+  ],
+
+  "Mardu Metalcraft": [
+    "Galvanic Blast",
+    "Glint Hawk",
+    "Kor Skyfisher",
+    "Thraben Inspector",
+    "Ancient Den",
+    "Vault of Whispers",
+    "Experimental Synthesizer"
   ]
 }

@@ -40,7 +40,7 @@ def classify_deck(
   return best_archetype, scores
 
 
-def classify_all_processed_decks() -> None:
+def classify_all_processed_decks(overwrite: bool = False) -> None:
   archetype_signatures = load_archetype_signatures(SIGNATURES_PATH)
 
   session = SessionLocal()
@@ -48,7 +48,9 @@ def classify_all_processed_decks() -> None:
   deleted_count = 0
 
   try:
-    query = session.query(Deck).filter(Deck.decklist_processed == True, Deck.archetype.is_(None))
+    query = session.query(Deck).filter(Deck.decklist_processed == True)
+    if not overwrite:
+      query = query.filter(Deck.archetype.is_(None))
 
     decks = query.all()
     print(f"{len(decks)} decks to label with archetypes")
@@ -90,4 +92,4 @@ def classify_all_processed_decks() -> None:
 
 
 if __name__ == "__main__":
-  classify_all_processed_decks()
+  classify_all_processed_decks(True)

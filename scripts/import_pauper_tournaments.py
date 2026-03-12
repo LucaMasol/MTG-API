@@ -96,9 +96,9 @@ def import_pauper_tournaments(days: int = 180) -> None:
 
     session.commit()
     if imported_count:
-      print(f"Imported {imported_count} tournaments")
+      print(f"Imported {imported_count} decks")
     if skipped_count:
-      print(f"Skipped {skipped_count} tournaments that are already in database")
+      print(f"Skipped {skipped_count} decks that are already in database")
 
 
   except Exception:
