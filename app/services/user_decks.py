@@ -134,7 +134,7 @@ def replace_user_deck_cards(
   db.query(UserDecklistCard).filter(UserDecklistCard.deck_id == deck.id).delete()
 
   for card_name, qty in payload.cards.items():
-    normalised_card_name = _ensure_card_exists(card_name, db)
+    card = _ensure_card_exists(card_name, db)
 
     mainboard = max(0, qty.mainboard)
     sideboard = max(0, qty.sideboard)
@@ -144,7 +144,7 @@ def replace_user_deck_cards(
 
     entry = UserDecklistCard(
       deck_id=deck.id,
-      card_name=normalised_card_name,
+      card_name=card.card_name,
       in_mainboard=mainboard,
       in_sideboard=sideboard,
     )
@@ -165,13 +165,13 @@ def append_user_deck_cards(
   deck = _get_owned_deck_or_404(deck_id, api_key, db)
 
   for card_name, qty in payload.cards.items():
-    normalised_card_name = _ensure_card_exists(card_name, db)
+    normalised_card = _ensure_card_exists(card_name, db)
 
     entry = (
       db.query(UserDecklistCard)
       .filter(
         UserDecklistCard.deck_id == deck.id,
-        UserDecklistCard.card_name == normalised_card_name,
+        UserDecklistCard.card_name == normalised_card.card_name,
       )
       .first()
     )
@@ -185,7 +185,7 @@ def append_user_deck_cards(
 
       entry = UserDecklistCard(
         deck_id=deck.id,
-        card_name=normalised_card_name,
+        card_name=normalised_card.card_name,
         in_mainboard=new_main,
         in_sideboard=new_side,
       )
