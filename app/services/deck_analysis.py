@@ -99,7 +99,7 @@ def predict_archetype_from_scores(
   best_archetype = max(
     scores,
     key=lambda archetype: (
-      scores[archetype]["score"],
+      -scores[archetype]["score"],
       archetype,
     ),
   )
@@ -315,5 +315,5 @@ def analyse_user_deck_spiciness(
     min_win_percentage=min_win_percentage,
     compared_deck_count=len(spicy_values),
     spiciness=round(sum(spicy_values) / len(spicy_values), 4),
-    closest_meta_decks=comparisons[:5],
+    closest_meta_decks=comparisons[:TOP_MATCHES_LIMIT],
   )
