@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter, Depends, Query, HTTPException
 from fastapi.responses import StreamingResponse
 
-from app.database import get_db
+from app.services.database_helpers import get_db
 from app.models import Deck
 from app.services.authentication_and_security import get_api_key_record
 from app.services.total_meta_analysis import (
@@ -196,11 +196,18 @@ def avg_wins_over_time_chart(
 
 
 @router.get("/decks/{deck_id}")
-def get_meta_deck(deck_id: int, db: Session = Depends(get_db)):
+def get_meta_deck(
+   deck_id: int,
+   tournament_id: int = Query(..., description="Tournament ID for the deck"),
+   db: Session = Depends(get_db),
+ ):
   deck = (
     db.query(Deck)
     .options(joinedload(Deck.decklist_cards))
-    .filter(Deck.deck_id == deck_id)
+    .filter(
+      Deck.deck_id == deck_id,
+      Deck.tournament_id == tournament_id,
+    )
     .first()
   )
 

@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session, joinedload
 
 from app.models import ApiKey, UserDeck, Deck, DecklistCard, Tournament
-from app.services.user_decks import _get_owned_deck_or_404
+from app.services.user_decks import get_owned_deck_or_404
 
 
 
@@ -44,7 +44,7 @@ def load_archetype_signatures() -> dict[str, set[str]]:
   }
 
 
-def normalise_card_name(card_name: str) -> str:
+def _normalise_card_name(card_name: str) -> str:
   return card_name.strip()
 
 
@@ -56,9 +56,9 @@ def extract_user_deck_card_names(deck: UserDeck) -> set[str]:
   card_names: set[str] = set()
 
   for card in deck.cards:
-      if (card.in_mainboard or 0) <= 0 and (card.in_sideboard or 0) <= 0:
-          continue
-      card_names.add(normalise_card_name(card.card_name))
+    if (card.in_mainboard or 0) <= 0 and (card.in_sideboard or 0) <= 0:
+      continue
+    card_names.add(_normalise_card_name(card.card_name))
 
   return card_names
 
@@ -156,7 +156,7 @@ def analyse_user_deck_archetype(
   db: Session,
   rogue_threshold: int = DEFAULT_ROGUE_THRESHOLD,
 ) -> UserDeckArchetypeAnalysisResponse:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
   deck_cards = extract_user_deck_card_names(deck)
 
   return build_archetype_analysis_from_card_names(
@@ -187,10 +187,6 @@ class UserDeckSpicinessAnalysisResponse(BaseModel):
   spiciness: float = Field(description="0 = identical to meta, 1 = nothing alike")
   closest_meta_decks: list[ClosestMetaDeckResponse]
   model_config = ConfigDict(from_attributes=True)
-
-
-def _normalise_card_name(card_name: str) -> str:
-  return card_name.strip()
 
 
 def _user_deck_to_vector(deck: UserDeck) -> dict[tuple[str, str], int]:
@@ -260,22 +256,22 @@ def analyse_user_deck_spiciness(
   api_key: ApiKey,
   db: Session,
 ) -> UserDeckSpicinessAnalysisResponse:
-  user_deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  user_deck = get_owned_deck_or_404(deck_id, api_key, db)
   user_vector = _user_deck_to_vector(user_deck)
 
   if not user_vector:
-      raise HTTPException(status_code=422, detail="Deck has no cards to analyse")
+    raise HTTPException(status_code=422, detail="Deck has no cards to analyse")
 
   query = (
-      db.query(Deck)
-      .join(Tournament, Deck.tournament_id == Tournament.tid)
-      .options(joinedload(Deck.decklist_cards))
-      .filter(Deck.archetype == archetype.strip())
-      .filter(Deck.decklist_processed.is_(True))
+    db.query(Deck)
+    .join(Tournament, Deck.tournament_id == Tournament.tid)
+    .options(joinedload(Deck.decklist_cards))
+    .filter(Deck.archetype == archetype.strip())
+    .filter(Deck.decklist_processed.is_(True))
   )
 
   if start_date is not None:
-      query = query.filter(Tournament.start_date >= int(start_date.timestamp()))
+    query = query.filter(Tournament.start_date >= int(start_date.timestamp()))
 
   meta_decks = query.all()
 
