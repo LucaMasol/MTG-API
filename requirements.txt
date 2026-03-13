@@ -1,8 +1,10 @@
-fastapi
-uvicorn
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.6
+
 httpx
 python-dotenv
-sqlalchemy
+sqlalchemy>=2.0
 psycopg2-binary
 requests
 curl-cffi

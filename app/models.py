@@ -68,6 +68,7 @@ class Card(Base):
   card_name = Column(String, primary_key=True)
 
   decklist_entries = relationship("DecklistCard", back_populates="card")
+  user_deck_entries = relationship("UserDecklistCard", back_populates="card")
 
 
 # Decklist table
@@ -96,8 +97,8 @@ class DecklistCard(Base):
 
   deck = relationship("Deck", back_populates="decklist_cards")
   card = relationship("Card", back_populates="decklist_entries")
-  
-  
+
+
 class User(Base):
   __tablename__ = "users"
 
@@ -108,6 +109,7 @@ class User(Base):
   created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
   api_keys = relationship("ApiKey", back_populates="user")
+  decks = relationship("UserDeck", back_populates="user", cascade="all, delete-orphan")
 
 
 class ApiKey(Base):
@@ -128,3 +130,50 @@ class ApiKey(Base):
   created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
   user = relationship("User", back_populates="api_keys")
+
+
+class UserDeck(Base):
+  __tablename__ = "user_decks"
+
+  id = Column(Integer, primary_key=True, index=True)
+  user_email = Column(
+    String,
+    ForeignKey("users.email", ondelete="CASCADE"),
+    nullable=False,
+    index=True,
+  )
+  name = Column(String, nullable=False)
+
+  user = relationship(
+    "User",
+    back_populates="decks",
+    foreign_keys=[user_email],
+    primaryjoin="User.email == UserDeck.user_email",
+  )
+
+  cards = relationship(
+    "UserDecklistCard",
+    back_populates="deck",
+    cascade="all, delete-orphan"
+  )
+
+
+class UserDecklistCard(Base):
+  __tablename__ = "user_decklist_cards"
+
+  deck_id = Column(
+    Integer,
+    ForeignKey("user_decks.id", ondelete="CASCADE"),
+    primary_key=True
+  )
+  card_name = Column(
+    String,
+    ForeignKey("cards.card_name", ondelete="CASCADE"),
+    primary_key=True
+  )
+
+  in_mainboard = Column(Integer, nullable=False, default=0)
+  in_sideboard = Column(Integer, nullable=False, default=0)
+
+  deck = relationship("UserDeck", back_populates="cards")
+  card = relationship("Card", back_populates="user_deck_entries")
