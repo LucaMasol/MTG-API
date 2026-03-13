@@ -22,13 +22,13 @@ class UserDeckResponse(BaseModel):
   id: int
   user_email: str
   name: str
-
-model_config = ConfigDict(from_attributes=True)
+  model_config = ConfigDict(from_attributes=True)
 
 
 class UserDeckListItem(BaseModel):
   id: int
   name: str
+  model_config = ConfigDict(from_attributes=True)
 
 
 class UserDeckListResponse(BaseModel):
@@ -55,6 +55,7 @@ class UserDeckDetailResponse(BaseModel):
   user_email: str
   name: str
   cards: list[DeckCardResponse]
+  model_config = ConfigDict(from_attributes=True)
 
 # Make sure the deck exists and belongs to the authenticated user
 def _get_owned_deck_or_404(deck_id: int, api_key: ApiKey, db: Session) -> UserDeck:
