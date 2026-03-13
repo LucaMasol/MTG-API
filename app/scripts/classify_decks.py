@@ -1,54 +1,43 @@
-import json
-from pathlib import Path
-
 from app.database import SessionLocal
 from app.models import Deck, DecklistCard
+from app.services.deck_analysis import (
+    load_archetype_signatures,
+    predict_archetype_from_scores,
+    score_deck_against_signatures,
+)
 
-
-SIGNATURES_PATH = Path("data/core_archetype_cards.json")
 ROGUE_THRESHOLD = 3
-
-# Signature being the core cards in a deck that make up an archetype
-def load_archetype_signatures(path: Path) -> dict[str, set[str]]:
-  with path.open("r", encoding="utf-8") as f:
-    raw_data = json.load(f)
-
-  return {
-    archetype: set(cards)
-    for archetype, cards in raw_data.items()
-  }
 
 # Score the deck against the top-played archetypes.
 # If all scores are low, label it a 'Rogue' deck.
 def classify_deck(
   deck_cards: set[str],
   archetype_signatures: dict[str, set[str]],
-  rogue_threshold: int = 2
+  rogue_threshold: int = ROGUE_THRESHOLD,
 ) -> tuple[str, dict[str, int]]:
-  scores = {}
+  scored = score_deck_against_signatures(deck_cards, archetype_signatures)
+  predicted_archetype, _ = predict_archetype_from_scores(
+    scored,
+    rogue_threshold=rogue_threshold,
+  )
 
-  for archetype, signature_cards in archetype_signatures.items():
-    score = sum(1 for card in signature_cards if card in deck_cards)
-    scores[archetype] = score
+  flat_scores = {
+    archetype: data["score"]
+    for archetype, data in scored.items()
+  }
 
-  best_archetype = max(scores, key=scores.get)
-  best_score = scores[best_archetype]
-
-  if best_score < rogue_threshold:
-    return "Rogue", scores
-
-  return best_archetype, scores
+  return predicted_archetype, flat_scores
 
 
 def classify_all_processed_decks(overwrite: bool = False) -> None:
-  archetype_signatures = load_archetype_signatures(SIGNATURES_PATH)
+  archetype_signatures = load_archetype_signatures()
 
   session = SessionLocal()
   updated_count = 0
   deleted_count = 0
 
   try:
-    query = session.query(Deck).filter(Deck.decklist_processed == True)
+    query = session.query(Deck).filter(Deck.decklist_processed.is_(True))
     if not overwrite:
       query = query.filter(Deck.archetype.is_(None))
 
@@ -61,7 +50,7 @@ def classify_all_processed_decks(overwrite: bool = False) -> None:
         DecklistCard.deck_id == deck.deck_id,
       ).all()
 
-      deck_cards = {row[0] for row in deck_cards_rows}
+      deck_cards = {row[0].strip() for row in deck_cards_rows if row[0]}
 
       if not deck_cards:
         print(f"{deck.tournament_id}-{deck.deck_id}: no cards found, deleting deck")

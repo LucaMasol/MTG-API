@@ -44,16 +44,16 @@ The database's tables will be created automatically when the import scripts are 
 ### Data Import Pipeline
 1. Import Tournament Data
 Fetches tournament data and results using the Spicerack API and stores in the database
-Run `python -m scripts.import_pauper_tournaments`
+Run `python -m app.scripts.import_pauper_tournaments`
 
 2. Fetch Decklists
 For each deck that has not been processed, gets the decklists for the deck using Moxfield's API and stores it in the database.
 Will take a good amount of time, but can be cancelled and continued at a later point.
-Run `python -m scripts.process_moxfield_decklists`
+Run `python -m app.scripts.process_moxfield_decklists`
 
 3. Archetype Classification
 Classifies the archetype for all unclassified decks using core cards in the archetypes
-Run `python -m scripts.classify_decks`
+Run `python -m app.scripts.classify_decks`
 
 ## Database Schema
 ### Tournament
