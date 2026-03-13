@@ -19,13 +19,12 @@ from app.services.user_decks import (
   append_user_deck_cards,
   delete_card_from_user_deck,
   delete_user_deck,
-  serialize_user_deck,
+  serialise_user_deck,
 )
 
 router = APIRouter(
   prefix="/user-decks",
   tags=["user-decks"],
-  dependencies=[Depends(get_api_key_record)],
 )
 
 
@@ -38,6 +37,7 @@ router = APIRouter(
 def create_user_deck_route(
   payload: CreateUserDeckRequest,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   return create_user_deck(payload, api_key, db)
 
@@ -49,6 +49,7 @@ def create_user_deck_route(
 )
 def list_user_decks_route(
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   decks = list_user_decks(api_key, db)
   return UserDeckListResponse(
@@ -64,9 +65,10 @@ def list_user_decks_route(
 def get_user_deck_route(
   deck_id: int,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   deck = get_user_deck(deck_id, api_key, db)
-  return serialize_user_deck(deck)
+  return serialise_user_deck(deck)
 
 
 @router.put(
@@ -78,6 +80,7 @@ def rename_user_deck_route(
   deck_id: int,
   payload: RenameUserDeckRequest,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   return rename_user_deck(deck_id, payload, api_key, db)
 
@@ -91,9 +94,10 @@ def replace_user_deck_cards_route(
   deck_id: int,
   payload: DeckCardsUpsertRequest,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   deck = replace_user_deck_cards(deck_id, payload, api_key, db)
-  return serialize_user_deck(deck)
+  return serialise_user_deck(deck)
 
 
 @router.put(
@@ -105,9 +109,10 @@ def append_user_deck_cards_route(
   deck_id: int,
   payload: DeckCardsUpsertRequest,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   deck = append_user_deck_cards(deck_id, payload, api_key, db)
-  return serialize_user_deck(deck)
+  return serialise_user_deck(deck)
 
 
 @router.delete(
@@ -119,6 +124,7 @@ def delete_card_from_user_deck_route(
   deck_id: int,
   card_name: str,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   delete_card_from_user_deck(deck_id, card_name, api_key, db)
   return None
@@ -132,6 +138,7 @@ def delete_card_from_user_deck_route(
 def delete_user_deck_route(
   deck_id: int,
   db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
 ):
   delete_user_deck(deck_id, api_key, db)
   return None

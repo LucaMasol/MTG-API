@@ -1,17 +1,21 @@
-from typing import Dict
+from typing import Dict, Annotated
 from fastapi import HTTPException
-from pydantic import BaseModel, constr
+from pydantic import BaseModel, StringConstraints
 from sqlalchemy.orm import Session
 
 from app.models import Card, ApiKey, UserDeck, UserDecklistCard
 
+NameStr = Annotated[
+    str,
+    StringConstraints(strip_whitespace=True, min_length=1, max_length=255)
+]
 
 class CreateUserDeckRequest(BaseModel):
-  name: str = constr(strip_whitespace=True, min_length=1, max_length=255)
+  name: NameStr
 
 
 class RenameUserDeckRequest(BaseModel):
-  name: str = constr(strip_whitespace=True, min_length=1, max_length=255)
+  name: NameStr
 
 
 class UserDeckResponse(BaseModel):
@@ -70,12 +74,12 @@ def _get_owned_deck_or_404(deck_id: int, api_key: ApiKey, db: Session) -> UserDe
 
 # If card does not exist in the shared card table, add it
 def _ensure_card_exists(card_name: str, db: Session) -> Card:
-  normalized_name = card_name.strip()
-  if not normalized_name:
+  normalised_name = card_name.strip()
+  if not normalised_name:
     raise HTTPException(status_code=422, detail="Card name cannot be empty")
-  card = db.query(Card).filter(Card.card_name == normalized_name).first()
+  card = db.query(Card).filter(Card.card_name == normalised_name).first()
   if not card:
-    card = Card(card_name=normalized_name)
+    card = Card(card_name=normalised_name)
     db.add(card)
     db.flush()
   return card
@@ -130,7 +134,7 @@ def replace_user_deck_cards(
   db.query(UserDecklistCard).filter(UserDecklistCard.deck_id == deck.id).delete()
 
   for card_name, qty in payload.cards.items():
-    _ensure_card_exists(card_name, db)
+    normalised_card_name = _ensure_card_exists(card_name, db)
 
     mainboard = max(0, qty.mainboard)
     sideboard = max(0, qty.sideboard)
@@ -140,7 +144,7 @@ def replace_user_deck_cards(
 
     entry = UserDecklistCard(
       deck_id=deck.id,
-      card_name=card_name,
+      card_name=normalised_card_name,
       in_mainboard=mainboard,
       in_sideboard=sideboard,
     )
@@ -161,13 +165,13 @@ def append_user_deck_cards(
   deck = _get_owned_deck_or_404(deck_id, api_key, db)
 
   for card_name, qty in payload.cards.items():
-    _ensure_card_exists(card_name, db)
+    normalised_card_name = _ensure_card_exists(card_name, db)
 
     entry = (
       db.query(UserDecklistCard)
       .filter(
         UserDecklistCard.deck_id == deck.id,
-        UserDecklistCard.card_name == card_name,
+        UserDecklistCard.card_name == normalised_card_name,
       )
       .first()
     )
@@ -181,7 +185,7 @@ def append_user_deck_cards(
 
       entry = UserDecklistCard(
         deck_id=deck.id,
-        card_name=card_name,
+        card_name=normalised_card_name,
         in_mainboard=new_main,
         in_sideboard=new_side,
       )
@@ -205,12 +209,13 @@ def delete_card_from_user_deck(
   db: Session,
 ) -> None:
   deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  normalised_card_name = card_name.strip()
 
   entry = (
     db.query(UserDecklistCard)
     .filter(
       UserDecklistCard.deck_id == deck.id,
-      UserDecklistCard.card_name == card_name,
+      UserDecklistCard.card_name == normalised_card_name,
     )
     .first()
   )
@@ -229,7 +234,7 @@ def delete_user_deck(deck_id: int, api_key: ApiKey, db: Session) -> None:
 
 
 # Convert deck and cards into the API response schema
-def serialize_user_deck(deck: UserDeck) -> UserDeckDetailResponse:
+def serialise_user_deck(deck: UserDeck) -> UserDeckDetailResponse:
   cards = sorted(deck.cards, key=lambda c: c.card_name.lower())
   return UserDeckDetailResponse(
     id=deck.id,
