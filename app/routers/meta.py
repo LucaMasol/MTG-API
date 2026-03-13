@@ -1,9 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session, joinedload
+from fastapi import APIRouter, Depends, Query, HTTPException
 from fastapi.responses import StreamingResponse
 
+from app.services.database_helpers import get_db
+from app.models import Deck
 from app.services.authentication_and_security import get_api_key_record
 from app.services.total_meta_analysis import (
   get_meta_summary,
@@ -190,3 +193,48 @@ def avg_wins_over_time_chart(
     get_avg_wins_over_time_data(start_time, end_time, whitelist)
   )
   return StreamingResponse(buf, media_type="image/png")
+
+
+@router.get("/decks/{deck_id}")
+def get_meta_deck(
+  deck_id: int,
+  tournament_id: str = Query(..., description="Tournament ID for the deck"),
+  db: Session = Depends(get_db),
+):
+  deck = (
+    db.query(Deck)
+    .options(joinedload(Deck.decklist_cards))
+    .filter(
+      Deck.deck_id == deck_id,
+      Deck.tournament_id == tournament_id,
+    )
+    .first()
+  )
+
+  if deck is None:
+    raise HTTPException(status_code=404, detail="Deck not found")
+
+  mainboard = []
+  sideboard = []
+
+  for card in deck.decklist_cards:
+    if (card.in_mainboard or 0) > 0:
+      mainboard.append({
+        "card_name": card.card_name,
+        "quantity": card.in_mainboard
+      })
+
+    if (card.in_sideboard or 0) > 0:
+      sideboard.append({
+        "card_name": card.card_name,
+        "quantity": card.in_sideboard
+      })
+
+  return {
+    "deck_id": deck.deck_id,
+    "deck_name": deck.name,
+    "archetype": deck.archetype,
+    "tournament_id": deck.tournament_id,
+    "mainboard": sorted(mainboard, key=lambda x: x["card_name"]),
+    "sideboard": sorted(sideboard, key=lambda x: x["card_name"]),
+  }

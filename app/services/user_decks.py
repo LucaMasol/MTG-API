@@ -58,7 +58,7 @@ class UserDeckDetailResponse(BaseModel):
   model_config = ConfigDict(from_attributes=True)
 
 # Make sure the deck exists and belongs to the authenticated user
-def _get_owned_deck_or_404(deck_id: int, api_key: ApiKey, db: Session) -> UserDeck:
+def get_owned_deck_or_404(deck_id: int, api_key: ApiKey, db: Session) -> UserDeck:
   deck = (
     db.query(UserDeck)
     .filter(
@@ -106,7 +106,7 @@ def list_user_decks(api_key: ApiKey, db: Session) -> list[UserDeck]:
 
 
 def get_user_deck(deck_id: int, api_key: ApiKey, db: Session) -> UserDeck:
-  return _get_owned_deck_or_404(deck_id, api_key, db)
+  return get_owned_deck_or_404(deck_id, api_key, db)
 
 
 def rename_user_deck(
@@ -115,7 +115,7 @@ def rename_user_deck(
   api_key: ApiKey,
   db: Session,
 ) -> UserDeck:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
   deck.name = payload.name
   db.commit()
   db.refresh(deck)
@@ -129,7 +129,7 @@ def replace_user_deck_cards(
   api_key: ApiKey,
   db: Session,
 ) -> UserDeck:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
 
   db.query(UserDecklistCard).filter(UserDecklistCard.deck_id == deck.id).delete()
 
@@ -162,7 +162,7 @@ def append_user_deck_cards(
   api_key: ApiKey,
   db: Session,
 ) -> UserDeck:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
 
   for card_name, qty in payload.cards.items():
     normalised_card = _ensure_card_exists(card_name, db)
@@ -208,7 +208,7 @@ def delete_card_from_user_deck(
   api_key: ApiKey,
   db: Session,
 ) -> None:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
   normalised_card_name = card_name.strip()
 
   entry = (
@@ -228,7 +228,7 @@ def delete_card_from_user_deck(
 
 
 def delete_user_deck(deck_id: int, api_key: ApiKey, db: Session) -> None:
-  deck = _get_owned_deck_or_404(deck_id, api_key, db)
+  deck = get_owned_deck_or_404(deck_id, api_key, db)
   db.delete(deck)
   db.commit()
 
