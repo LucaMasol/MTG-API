@@ -64,7 +64,7 @@ def get_meta_over_time_summary(
 
     for row in results:
       summary.append({
-        "week": row.week.strftime("%Y-%m-%d"),
+        "week": row.week.date(),
         "archetype": row.archetype,
         "deck_count": row.deck_count,
         "wins": int(row.wins or 0),

@@ -41,14 +41,12 @@ def fetch_pauper_tournaments(days: int = 180) -> list[dict]:
 def import_pauper_tournaments(days: int = 180) -> None:
   tournaments_data = fetch_pauper_tournaments(days=days)
 
-  Base.metadata.create_all(bind=engine)
-
   session = SessionLocal()
 
   try:
     imported_count = 0
     skipped_count = 0
-    
+
     for tournament_data in tournaments_data:
       tid = str(tournament_data["TID"])
 
@@ -76,7 +74,7 @@ def import_pauper_tournaments(days: int = 180) -> None:
         if not decklist:
           continue
 
-        # Add deck to DB. 
+        # Add deck to DB.
         # Decklist will have to be added via process_moxfield_decklists script
         # Archetype will have to be added via classify_decks script
         deck = Deck(
@@ -109,4 +107,4 @@ def import_pauper_tournaments(days: int = 180) -> None:
 
 
 if __name__ == "__main__":
-  import_pauper_tournaments(days=30)
+  import_pauper_tournaments(days=240)
