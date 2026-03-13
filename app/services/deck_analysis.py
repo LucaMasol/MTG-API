@@ -99,7 +99,7 @@ def predict_archetype_from_scores(
   best_archetype = max(
     scores,
     key=lambda archetype: (
-      -scores[archetype]["score"],
+      scores[archetype]["score"],
       archetype,
     ),
   )

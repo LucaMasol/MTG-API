@@ -1,6 +1,6 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, status, Query
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from app.services.authentication_and_security import get_api_key_record
 from app.services.database_helpers import get_db

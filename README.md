@@ -1,5 +1,3 @@
-# TODO: OUT OF DATE
-
 # MTG Meta Analytics API
 An API for analysing the Magic: The Gathering Pauper archetypal metagame over time, comparitively with user-inputted decks.
 
