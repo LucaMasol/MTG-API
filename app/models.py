@@ -97,8 +97,8 @@ class DecklistCard(Base):
 
   deck = relationship("Deck", back_populates="decklist_cards")
   card = relationship("Card", back_populates="decklist_entries")
-  
-  
+
+
 class User(Base):
   __tablename__ = "users"
 
@@ -130,8 +130,8 @@ class ApiKey(Base):
   created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
   user = relationship("User", back_populates="api_keys")
-  
-  
+
+
 class UserDeck(Base):
   __tablename__ = "user_decks"
 
@@ -143,7 +143,7 @@ class UserDeck(Base):
     index=True,
   )
   name = Column(String, nullable=False)
-  
+
   user = relationship(
     "User",
     back_populates="decks",

@@ -116,7 +116,7 @@ def append_user_deck_cards_route(
 
 
 @router.delete(
-  "/{deck_id}/cards/{card_name}",
+  "/{deck_id}/cards/{card_name:path}",
   status_code=status.HTTP_204_NO_CONTENT,
   summary="Delete a card from a user deck",
 )

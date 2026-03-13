@@ -1,13 +1,13 @@
 from typing import Dict, Annotated
 from fastapi import HTTPException
-from pydantic import BaseModel, StringConstraints
+from pydantic import BaseModel, StringConstraints, ConfigDict
 from sqlalchemy.orm import Session
 
 from app.models import Card, ApiKey, UserDeck, UserDecklistCard
 
 NameStr = Annotated[
-    str,
-    StringConstraints(strip_whitespace=True, min_length=1, max_length=255)
+  str,
+  StringConstraints(strip_whitespace=True, min_length=1, max_length=255)
 ]
 
 class CreateUserDeckRequest(BaseModel):
@@ -23,8 +23,7 @@ class UserDeckResponse(BaseModel):
   user_email: str
   name: str
 
-  class Config:
-    from_attributes = True
+model_config = ConfigDict(from_attributes=True)
 
 
 class UserDeckListItem(BaseModel):
