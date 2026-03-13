@@ -197,10 +197,10 @@ def avg_wins_over_time_chart(
 
 @router.get("/decks/{deck_id}")
 def get_meta_deck(
-   deck_id: int,
-   tournament_id: int = Query(..., description="Tournament ID for the deck"),
-   db: Session = Depends(get_db),
- ):
+  deck_id: int,
+  tournament_id: str = Query(..., description="Tournament ID for the deck"),
+  db: Session = Depends(get_db),
+):
   deck = (
     db.query(Deck)
     .options(joinedload(Deck.decklist_cards))

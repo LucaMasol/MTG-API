@@ -1,11 +1,13 @@
 # TODO: OUT OF DATE
 
 # MTG Meta Analytics API
-
-ToDo: short description
+An API for analysing the Magic: The Gathering Pauper archetypal metagame over time, comparitively with user-inputted decks.
 
 ## Project overview
-Todo: what the system does
+* Users can authenticate via a basic signup process, accepting an email and password. An API key is generated from this that the user can utilise for future requests. All other routes will require this API key, or not accept the request.
+* The user can query endpoints to receive data of trends in the Pauper archetypal metagame in the form of JSON, or, for demonstrative purposes, visualisations of said data.
+* The user can create their own decks and decklists. These decklists can be estimated to fall under an archetype, and the user can test how 'spicy' (non-conforming) their list is compared to the recent well-performing meta.
+
 
 ## Architecture / Tech Stack
 ### Backend Framework
@@ -27,35 +29,35 @@ Todo: what the system does
 
 
 ## Setup Instructions
-### Installation
-1. Clone the repository via `git clone` or downloading the repo as a .zip file.
-2. Create a Python virtual environment in the root of the project `python -m venv venv`
-3. Activate the environment (differs per OS)
-    * Windows: `venv\Scripts\activate`
-    * Linux: `source venv/bin/activate`
-4. Install npm dependencies: `pip install -r requirements.txt`
+### Prerequisites
+* Docker
+* Spicerack.gg API key
+  1. First, create a user account (https://www.spicerack.gg/)
+  2. Second, create an organisational account (https://docs.spicerack.gg/)
+  3. Go to the admin dashboard and then to the organisation settings. Here, you can find your API key
 
 ### Environment
 1. Create a `.env` file given the structure of `./.env.example`.
 2. Add your Spicerack API key to the `.env` file. If you do not have one, you will need to set up an account.
 
-### Database setup
-Ensure PostgreSQL is running and create the database with `createdb mtg_api_db`.
-The database's tables will be created automatically when the import scripts are run.
+### Installation
+1. Clone the repository via `git clone` or downloading the repo as a .zip file.
+2. Ensure the Docker engine is running
+3. Run `docker compose up --build`
+    * The first time this run, the database is created and filled, and will take a significant amount of time, of at least 40 minutes. Rate limiters are being used as to not over-request Moxfield's API.
+4. To run in the future, run `docker compose up --build` again.
 
-### Data Import Pipeline
+### Data Import/ Preprocessing Pipeline TODO - more detail
+The following pipeline is initiated at a time of 240 days when the server first opens. This will take upwards of 40 minutes on its first run. While the server is running, every 6 hours, the pipeline is run again for the period of 2 days. This is to ensure any recently ended events are not omitted from the dataset, and the database remains up-to-date.
 1. Import Tournament Data
 Fetches tournament data and results using the Spicerack API and stores in the database
-Run `python -m app.scripts.import_pauper_tournaments`
 
 2. Fetch Decklists
 For each deck that has not been processed, gets the decklists for the deck using Moxfield's API and stores it in the database.
 Will take a good amount of time, but can be cancelled and continued at a later point.
-Run `python -m app.scripts.process_moxfield_decklists`
 
 3. Archetype Classification
 Classifies the archetype for all unclassified decks using core cards in the archetypes
-Run `python -m app.scripts.classify_decks`
 
 ## Database Schema
 ### Tournament
@@ -78,7 +80,7 @@ One decklist card has one deck and one card..
 Interactive API documentation is available at:
 http://127.0.0.1:8000/docs
 
-## 13. Data Sources
+## Data Sources
 * Spicerack API – provides tournament results and deck metadata used to populate the database.
 Spicerack. (2025). Spicerack API. Available at: https://api.spicerack.gg
 
