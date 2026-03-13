@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
   try:
     run_spicerack_sync(days=240)
     logger.info("Initial Spicerack sync completed")
-  except:
+  except Exception:
     logger.exception("Initial Spicerack sync failed. The database may be out of sync.")
 
   try:

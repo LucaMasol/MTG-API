@@ -7,5 +7,5 @@ __pycache__
 venv
 .git
 .gitignore
-pytest_cache
+.pytest_cache
 .mypy_cache

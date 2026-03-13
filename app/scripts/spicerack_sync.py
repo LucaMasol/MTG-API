@@ -43,10 +43,15 @@ def run_spicerack_sync(days: int = 2) -> int:
   except Exception:
     logger.exception("An element of the synchronisation failed")
     return 1
+  finally:
+    fcntl.flock(lock_file, fcntl.LOCK_UN)
+    lock_file.close()
+
+  return 0
 
 
 def main() -> int:
   return run_spicerack_sync()
 
 if __name__ == "__main__":
-    sys.exit(main())
+  sys.exit(main())
