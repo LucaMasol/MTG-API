@@ -62,4 +62,4 @@ app.include_router(api_v1_router)
 
 @app.get("/")
 def root():
-  return {"message": "Server is running. See http://127.0.0.1:8000/docs for documentation."}
+  return {"message": "Server is running. See /docs for documentation."}
