@@ -3,7 +3,6 @@ import random
 import pytest
 import json
 from pathlib import Path
-import time
 import os
 
 BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
