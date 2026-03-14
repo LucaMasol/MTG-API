@@ -13,3 +13,4 @@ passlib
 pydantic[email]
 bcrypt==4.0.1
 apscheduler
+pytest

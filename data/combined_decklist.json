@@ -1,0 +1,27 @@
+{
+  "cards": {
+    "Avenging Hunter":      { "mainboard": 3,  "sideboard": 0 },
+    "Birchlore Rangers":    { "mainboard": 4,  "sideboard": 0 },
+    "Forest":               { "mainboard": 17, "sideboard": 0 },
+    "Generous Ent":         { "mainboard": 4,  "sideboard": 0 },
+    "Jaspera Sentinel":     { "mainboard": 4,  "sideboard": 0 },
+    "Lead the Stampede":    { "mainboard": 4,  "sideboard": 0 },
+    "Llanowar Elves":       { "mainboard": 4,  "sideboard": 0 },
+    "Masked Vandal":        { "mainboard": 2,  "sideboard": 1 },
+    "Nyxborn Hydra":        { "mainboard": 4,  "sideboard": 0 },
+    "Priest of Titania":    { "mainboard": 4,  "sideboard": 0 },
+    "Quirion Ranger":       { "mainboard": 4,  "sideboard": 0 },
+    "Timberwatch Elf":      { "mainboard": 4,  "sideboard": 0 },
+    "Wellwisher":           { "mainboard": 2,  "sideboard": 0 },
+    "Winding Way":          { "mainboard": 4,  "sideboard": 0 },
+    "Plains":               { "mainboard": 3,  "sideboard": 0 },
+    "Island":               { "mainboard": 4,  "sideboard": 0 },
+    "Swamp":                { "mainboard": 13, "sideboard": 0 },
+    "Mountain":             { "mainboard": 4,  "sideboard": 0 },
+    "Blue Elemental Blast": { "mainboard": 0,  "sideboard": 4 },
+    "Faerie Macabre":       { "mainboard": 0,  "sideboard": 3 },
+    "Hydroblast":           { "mainboard": 0,  "sideboard": 2 },
+    "Spell Pierce":         { "mainboard": 0,  "sideboard": 3 },
+    "Valakut Invoker":      { "mainboard": 0,  "sideboard": 2 }
+  }
+}

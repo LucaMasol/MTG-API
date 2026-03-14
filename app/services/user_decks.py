@@ -44,17 +44,11 @@ class DeckCardsUpsertRequest(BaseModel):
   cards: Dict[str, CardQuantityUpdate]
 
 
-class DeckCardResponse(BaseModel):
-  card_name: str
-  mainboard: int
-  sideboard: int
-
-
 class UserDeckDetailResponse(BaseModel):
   id: int
   user_email: str
   name: str
-  cards: list[DeckCardResponse]
+  cards: Dict[str, CardQuantityUpdate]
   model_config = ConfigDict(from_attributes=True)
 
 # Make sure the deck exists and belongs to the authenticated user
@@ -240,12 +234,11 @@ def serialise_user_deck(deck: UserDeck) -> UserDeckDetailResponse:
     id=deck.id,
     user_email=deck.user_email,
     name=deck.name,
-    cards=[
-      DeckCardResponse(
-        card_name=card.card_name,
+    cards={
+      card.card_name: CardQuantityUpdate(
         mainboard=card.in_mainboard,
         sideboard=card.in_sideboard,
       )
       for card in cards
-    ],
+    },
   )
