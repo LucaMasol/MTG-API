@@ -1,0 +1,9 @@
+{
+  "cards": {
+    "Plains":               { "mainboard": 3,   "sideboard": 0 },
+    "Island":               { "mainboard": 4,   "sideboard": 0 },
+    "Swamp":                { "mainboard": 13,  "sideboard": 0 },
+    "Mountain":             { "mainboard": 4,   "sideboard": 0 },
+    "Forest":               { "mainboard": 4,   "sideboard": 0 }
+  }
+}

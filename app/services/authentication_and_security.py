@@ -66,7 +66,7 @@ def signup(payload: SignupRequest, db: Session) -> SignupResponse:
     key_hash=hash_api_key(raw_key),
   )
   db.add(api_key)
-  
+
   # Prevent race during signup of 2 of the same email into a 409 response instead of server error
   try:
     db.commit()
@@ -79,8 +79,8 @@ def signup(payload: SignupRequest, db: Session) -> SignupResponse:
     api_key=raw_key,
   )
 
-RATE_LIMIT_REQUESTS = 10
-RATE_LIMIT_WINDOW_SECONDS = 10
+RATE_LIMIT_REQUESTS = 60
+RATE_LIMIT_WINDOW_SECONDS = 60
 BLOCK_MINUTES = 5
 
 def get_api_key_record(
@@ -95,7 +95,7 @@ def get_api_key_record(
     raise HTTPException(status_code=401, detail="Missing API key")
 
   hashed = hash_api_key(x_api_key)
-  
+
   # Lock the API key row during rate-limit eval to prevent concurrent requests bypassing
   api_key = (
     db.query(ApiKey)

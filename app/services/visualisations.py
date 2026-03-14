@@ -210,7 +210,7 @@ def build_avg_wins_over_time_chart(data):
       label=archetype
     )
 
-  ax.set_title("Average Swiss Wins Over Time by Archetype")
+  ax.set_title("Average Wins Over Time by Archetype")
   ax.set_xlabel("Week")
   ax.set_ylabel("Average Wins")
   ax.tick_params(axis="x", rotation=90)

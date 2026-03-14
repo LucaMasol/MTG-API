@@ -8,6 +8,7 @@ from app.services.user_decks import (
   CreateUserDeckRequest,
   RenameUserDeckRequest,
   DeckCardsUpsertRequest,
+  CardQuantityUpdate,
   UserDeckResponse,
   UserDeckListResponse,
   UserDeckListItem,
@@ -91,10 +92,31 @@ def rename_user_deck_route(
 ):
   return rename_user_deck(deck_id, payload, api_key, db)
 
+@router.get(
+  "/{deck_id}/cards",
+  response_model=DeckCardsUpsertRequest,
+  summary="Get cards from a user deck",
+)
+def get_user_deck_cards_route(
+  deck_id: int,
+  db: Session = Depends(get_db),
+  api_key=Depends(get_api_key_record),
+):
+  deck = get_user_deck(deck_id, api_key, db)
+  return DeckCardsUpsertRequest(
+    cards={
+      card.card_name: CardQuantityUpdate(
+        mainboard=card.in_mainboard,
+        sideboard=card.in_sideboard,
+      )
+      for card in sorted(deck.cards, key=lambda c: c.card_name.lower())
+    }
+  )
 
 @router.post(
   "/{deck_id}/cards",
   response_model=UserDeckDetailResponse,
+  status_code=status.HTTP_201_CREATED,
   summary="Replace all cards in a user deck",
 )
 def replace_user_deck_cards_route(
