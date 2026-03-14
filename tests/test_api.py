@@ -4,8 +4,9 @@ import pytest
 import json
 from pathlib import Path
 import time
+import os
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 API_PREFIX = "/api/v1"
 
 
@@ -33,7 +34,6 @@ def test_user():
   yield user
 
   # AFTER EACH TEST
-  time.sleep(1)
   pass
 
 @pytest.fixture
@@ -44,7 +44,6 @@ def test_user_w_deck():
   headers = {"X-API-Key": user["api_key"]}
   data = {
     "name": "Test Deck",
-    "format": "pauper"
   }
 
   user['deck'] = requests.post(f"{BASE_URL}{API_PREFIX}/user-decks", json=data, headers=headers).json()["id"]
@@ -52,7 +51,6 @@ def test_user_w_deck():
   yield user
 
   # AFTER EACH TEST
-  time.sleep(1)
   pass
 
 
@@ -115,7 +113,6 @@ def test_create_deck(test_user):
 
   data = {
     "name": "Test Deck",
-    "format": "pauper"
   }
 
   r = requests.post(f"{BASE_URL}{API_PREFIX}/user-decks", json=data, headers=headers)
