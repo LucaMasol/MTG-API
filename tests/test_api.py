@@ -47,7 +47,7 @@ def test_user_w_deck():
     "format": "pauper"
   }
 
-  user["deck"] = requests.post(f"{BASE_URL}{API_PREFIX}/user-decks", json=data, headers=headers).json()["id"]
+  user['deck'] = requests.post(f"{BASE_URL}{API_PREFIX}/user-decks", json=data, headers=headers).json()["id"]
 
   yield user
 
@@ -94,7 +94,6 @@ def test_signup_new_user():
 
 def test_signup_existing_user(test_user):
   """Test attempting to create a new user"""
-  print(f"-{test_user["email"]}-")
   existing_user_response = new_test_user(email=test_user["email"])
 
   assert existing_user_response["status_code"] == 409
@@ -137,17 +136,17 @@ def test_post_decklist(test_user_w_deck, small_decklist_data, normal_decklist_da
   """POST data twice to a decklist"""
   headers = {"X-API-Key": test_user_w_deck["api_key"]}
   post_r1 = requests.post(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=normal_decklist_data,
     headers=headers
   )
   post_r2 = requests.post(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=small_decklist_data,
     headers=headers
   )
   get_r = requests.get(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     headers=headers
   )
 
@@ -162,17 +161,17 @@ def test_put_decklist(test_user_w_deck, small_decklist_data, normal_decklist_dat
   """PUT data in a decklist"""
   headers = {"X-API-Key": test_user_w_deck["api_key"]}
   post_r = requests.post(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=normal_decklist_data,
     headers=headers
   )
   put_r = requests.put(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=small_decklist_data,
     headers=headers
   )
   get_r = requests.get(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     headers=headers
   )
 
@@ -187,13 +186,13 @@ def test_delete_from_decklist(test_user_w_deck, normal_decklist_data):
   """DELETE data in a decklist"""
   headers = {"X-API-Key": test_user_w_deck["api_key"]}
   requests.post(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=normal_decklist_data,
     headers=headers
   )
 
   requests.put(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json={
       "cards": {
         "Plains": { "mainboard": 3,   "sideboard": 0 }
@@ -203,12 +202,12 @@ def test_delete_from_decklist(test_user_w_deck, normal_decklist_data):
   )
 
   delete_r = requests.delete(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards/Plains",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards/Plains",
     headers=headers
   )
 
   get_r = requests.get(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     headers=headers
   )
 
@@ -220,16 +219,16 @@ def test_delete_from_decklist(test_user_w_deck, normal_decklist_data):
 
 
 def test_estimate_archetype(test_user_w_deck, normal_decklist_data):
-  """DELETE data in a decklist"""
+  """Estimate archetype for user deck"""
   headers = {"X-API-Key": test_user_w_deck["api_key"]}
   requests.post(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/cards",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/cards",
     json=normal_decklist_data,
     headers=headers
   )
 
   r = requests.get(
-    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck["deck"]}/analysis/archetype",
+    f"{BASE_URL}{API_PREFIX}/user-decks/{test_user_w_deck['deck']}/analysis/archetype",
     headers=headers
   )
 
