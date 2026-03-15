@@ -237,11 +237,11 @@ def get_user_deck_cards_route(
             "id": 1,
             "user_email": "test@example.com",
             "name": "Elves Testing List",
-            "cards": [
-              {"card_name": "Llanowar Elves", "mainboard": 4, "sideboard": 0},
-              {"card_name": "Priest of Titania", "mainboard": 4, "sideboard": 0},
-              {"card_name": "Hydroblast", "mainboard": 0, "sideboard": 3}
-            ]
+            "cards": {
+              "Llanowar Elves": {"mainboard": 4, "sideboard": 0},
+              "Priest of Titania": {"mainboard": 4, "sideboard": 0},
+              "Hydroblast": {"mainboard": 0, "sideboard": 3}
+            }
           }
         }
       }
