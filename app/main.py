@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
   title="MTG Meta Analytics API",
   description="API for analysing Magic: The Gathering decks and metagame data",
-  version="0.3",
+  version="1.0",
   lifespan=lifespan,
 )
 

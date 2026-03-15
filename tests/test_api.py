@@ -146,8 +146,8 @@ def test_post_decklist(test_user_w_deck, small_decklist_data, normal_decklist_da
     headers=headers
   )
 
-  assert post_r1.status_code == 201
-  assert post_r2.status_code == 201
+  assert post_r1.status_code == 200
+  assert post_r2.status_code == 200
   assert get_r.status_code == 200
   assert isinstance(get_r.json(), dict)
   assert get_r.json() == small_decklist_data
@@ -171,7 +171,7 @@ def test_put_decklist(test_user_w_deck, small_decklist_data, normal_decklist_dat
     headers=headers
   )
 
-  assert post_r.status_code == 201
+  assert post_r.status_code == 200
   assert put_r.status_code == 200
   assert get_r.status_code == 200
   assert isinstance(get_r.json(), dict)

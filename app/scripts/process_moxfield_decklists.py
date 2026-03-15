@@ -22,7 +22,7 @@ def fetch_moxfield_deck(deck_id: str) -> dict:
   response.raise_for_status()
   return response.json()
 
-# May have to require more normalisation in the future. ToDo - See if necessary.
+# May have to require more normalisation in the future.
 def normalise_card_name(card_name: str) -> str:
   return card_name.strip()
 
